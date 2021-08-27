@@ -1,3 +1,6 @@
+//프로그래머스 1단계 문제
+//https://programmers.co.kr/learn/courses/30/lessons/77484#fn1
+
 function solution(lottos, win_nums) {
   let answer = [];
   const LOTTO = [6, 6, 5, 4, 3, 2, 1]; //LOTTO[일치하는 갯수] = 순위
