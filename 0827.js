@@ -1,5 +1,5 @@
 //프로그래머스 1단계 문제
-//https://programmers.co.kr/learn/courses/30/lessons/77484#fn1
+//https://programmers.co.kr/learn/courses/30/lessons/77484
 
 function solution(lottos, win_nums) {
   let answer = [];
@@ -12,6 +12,8 @@ function solution(lottos, win_nums) {
   let unknownNum = 0;
   let lottoNum = 0;
   
+  //입력값이 길이가 6인 배열인 걸 알아서 forEach 안에서 선형탐색(includes)
+  //실제로는 O(n^2)의 시간복잡도를 가지게 되므로 입력값이 많은 경우에는 사용 어려움 ㅠ
   lottos.forEach((num) => {
       if(num === 0) unknownNum++;
       if(win_nums.includes(num)) lottoNum++;
