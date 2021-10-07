@@ -8,17 +8,18 @@
 */
 
 function solution(n) {
-  let prime = new Array();
+  //* 에라토스테네스의 체:
+  //* 소수를 구하고자 하는 범위 2~n이 있을 때,
+  //* 2~n의 제곱근에 해당하는 범위 안의 소수의 배수들을 계속 제외하면 결국 소수만 남는다
 
-  for(let i=2; i<=n; i++) {
-    if(isPrime(i)) prime.push(i)
-  }
-  return prime.length;
-}
+  let isPrime = new Array(n+1).fill(true).fill(false, 0, 2);
 
-const isPrime = (num) => {
-  for(let i=2; i<=Math.sqrt(num); i++) {
-    if(num%i === 0) return false;
+  for(let i=2; i<=Math.sqrt(n); i++) {
+    for(let j=i; j<=n; j+=i) {
+      if(j/i === 1) continue;
+      if(isPrime[j]) isPrime[j] = false;
+    }
   }
-  return true;
+
+  return isPrime.filter((num) => num).length;
 }
