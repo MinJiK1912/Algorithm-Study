@@ -22,7 +22,10 @@
 
 function solution(dartResult) {
   //점수를 인덱스로 계산했더니 1,2,3점이 아닌 케이스 계산을 못함
+  //1D2S0T -> 1D 2S 0T
+
   let dartResultArr = dartResult.split(/[0-9]{0,}/);
+  //점수 분리를 어떻게 해야되지?
 
   let dartScore = new Array();
   dartResultArr.forEach((result, idx) => {
