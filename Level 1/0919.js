@@ -21,34 +21,55 @@
 */
 
 function solution(dartResult) {
-  //점수를 인덱스로 계산했더니 1,2,3점이 아닌 케이스 계산을 못함
-  //1D2S0T -> 1D 2S 0T
-
-  let dartResultArr = dartResult.split(/[0-9]{0,}/);
-  //점수 분리를 어떻게 해야되지?
-
-  let dartScore = new Array();
-  dartResultArr.forEach((result, idx) => {
-    if(idx === 0) {
-      dartScore.push(0);
-      return;
-    }
-
-    let score = 0;
-    const POW = [0, 'S', 'D', 'T'];
-    score = Math.pow(idx, POW.indexOf(result[0]));
-    if(result[1]) {
-      if(result[1] === '*') {
-        score *= 2;
-        dartScore[idx-1] *= 2;
+  //앞에서부터 한자리씩 짤라서 숫자 나오면 앞에있던 내용 비우고 새로 점수매기기
+  //10점은 이전 값이 숫자인지 아닌지 체크
+  //NaN도 타입은 Number인데 어떻게? -> 정규식 활용
+  
+  dartResult = dartResult.split('');
+  let curScore = new Array();
+  let scoreSet = new Array();
+  
+  while(dartResult.length){
+      let curChar = dartResult.shift();
+      
+      //현재 문자(curChar)가 숫자인 경우
+      //1. 한자리수(0~9점)일 경우 -> 그냥 curScore 비우고 추가하면됨
+      //2. 두자리수(10점)일 경우 -> 앞의 숫자가 숫자인지 체크해서 연결
+      //curChar가 숫자인데 curScore의 길이가 1이면 10점이라는 뜻
+      if(/[0-9]/.test(curChar)) {
+          if(curScore.length === 1) curScore.push(curChar);
+          else {
+              scoreSet.push(curScore.join(''));
+              curScore = new Array();
+              curScore.push(curChar);
+          }
       }
-      if(result[1] === '#') {
-        score *= -1;
-        dartScore[idx-1] *= -1;
+      else curScore.push(curChar);
+      
+      if(dartResult.length === 0) scoreSet.push(curScore.join(''));
+  }
+  scoreSet.shift();
+  
+  const scoreBoard = new Array(3);
+  
+  //scoreSet에 점수 넣어놨으니 계산해서 scoreBoard에 넣어주기만 하면 그만
+  scoreSet.forEach((curScore, idx) => {
+      let score = Number(curScore.match(/[0-9]/g).join(''));
+      let options = curScore.match(/[^0-9]/g);
+      let exponent = options[0], bonus;
+      if(options.length > 1) bonus = options[1];
+      
+      const pow = [0, 'S', 'D', 'T'];
+      
+      scoreBoard[idx] = Math.pow(score, pow.indexOf(exponent));
+      
+      if (bonus === '*') {
+          if(idx > 0) scoreBoard[idx-1] *= 2;
+          scoreBoard[idx] *= 2;
       }
-    }
-    dartScore.push(score);
+      
+      if(bonus === '#') scoreBoard[idx] *= -1;
   })
-
-  return dartScore.reduce((sum, result) => sum += result, 0);
+  
+  return scoreBoard.reduce((sum, el) => sum += el, 0);
 }
